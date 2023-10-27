@@ -3,6 +3,8 @@
 
 generator client {
     provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+
 }
 
 datasource db {
@@ -15,13 +17,44 @@ model Competition {
     id          Int       @id @default(autoincrement())
     name        String
     description String?
+    winPoints   Int
+    drawPoints  Int
+    losePoints  Int
     players     Player[]
+    rounds      Round[]
+    ownerId     String
 }
 
 model Player {
     id            Int           @id @default(autoincrement())
     name          String
     description   String?
-    competition   Competition?  @relation(fields: [competitionId], references: [id])
-    competitionId Int?
+    competition   Competition  @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+    competitionId Int
+    matchesFirst  Match[]      @relation("MatchFirstPlayer")
+    matchesSecond Match[]      @relation("MatchSecondPlayer")
+}
+
+model Round {
+    id            Int           @id @default(autoincrement())
+    name          String
+    description   String?
+    competition   Competition   @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+    competitionId Int
+    matches       Match[]
+    order         Int
+    completed     Boolean       @default(false)
+}
+
+model Match {
+    id            Int           @id @default(autoincrement())
+    name          String
+    description   String?
+    round         Round         @relation(fields: [roundId], references: [id], onDelete: Cascade)
+    roundId       Int
+    firstPlayer   Player        @relation("MatchFirstPlayer", fields: [firstPlayerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    firstPlayerId Int
+    secondPlayer  Player        @relation("MatchSecondPlayer", fields: [secondPlayerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    secondPlayerId Int
+    resultEnum     Int
 }
