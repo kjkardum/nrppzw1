@@ -1,11 +1,9 @@
-import {PrismaClient} from "@prisma/client";
 import {getSession} from "@auth0/nextjs-auth0";
+import {prismaClient} from "@/services/prismaClient";
 
-// TO REMOVE FROM PRODUCTION
 export const GET = async (req: Request) => {
     const session = await getSession();
-    const prisma = new PrismaClient();
-    const competitions = await prisma.competition.findMany();
+    const competitions = await prismaClient.competition.findMany();
     if (session) {
         return new Response(JSON.stringify({
             dbCompetitions: competitions,
