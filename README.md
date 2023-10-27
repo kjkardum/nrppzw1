@@ -16,21 +16,34 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project task
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Potrebno je izraditi web-aplikaciju koja će služiti za praćenje natjecanja koja se odvijaju po jednokružnom sustavu natjecanja.
 
-## Learn More
+Natjecanje može definirati prijavljeni korisnik tako da na početnoj stranici unese naziv natjecanja, popis natjecatelja (natjecatelji su odvojeni točkom zarez ili novim redom) i odabere sustav bodovanja u obliku `pobjeda/remi/poraz`, npr. 3/1/0 (nogomet), 1/0,5/0 (šah), 2/0/1 (košarka) i slično.
 
-To learn more about Next.js, take a look at the following resources:
+U slučaju da su podaci valjani, aplikacija treba generirati cjelokupni raspored po kolima i omogućiti unos rezultata korisniku koji je stvorio natjecanje (ali samo njemu, ne i ostalim korisnicima).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Napomena: Korisnik ne unosi raspored (raspored generira aplikacija), već samo unosi/mijenja rezultate nakon čega aplikacija ažurira poredak natjecatelja temeljem dotadašnjih rezultata.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Više o sustavu "svatko sa svakim" možete pročitati na https://hrcak.srce.hr/file/350365 uz opasku da ne morate implementirati algoritam, već možete koristiti unaprijed pripremljene rasporede za podržane brojeve natjecatelja. Broj natjecatelja ograničiti na 4 do 8.
 
-## Deploy on Vercel
+Stranica s rezultatima i trenutnim poretkom nekog natjecanja mora biti javno dostupna preko posebno generirane poveznice za to natjecanje. Poveznica mora biti vidljiva korisniku koji je stvorio natjecanje kako bi je mogao podijeliti s natjecateljima.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Prijava korisnika u aplikaciju odvija se korištenjem protokola _OpenId Connect (OIDC)_ i servisa _Auth0_. Korisnike na servisu _Auth0_ možete dodati kroz opciju _User management/Users_ na _Auth0_. Za potrebe testiranja aplikacije pripremiti jedan račun ili na _Auth0_ omogućiti prijavu preko _Googlea_.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Za pohranu podataka koristiti _PostgreSQL_ na _Renderu_ ili neku drugu bazu podataka po izboru (npr. _Firebase_).
+
+**Aplikaciju postaviti u oblak (preporuča se besplatna opcija na Renderu), a kao odgovor na ovo pitanje isporučiti redom:**
+
+- adresu javno dostupnog git repozitorija s izvornim kodom aplikacije
+- adresu aplikacije
+- adresu barem jednog stvorenog natjecanja s unesenim rezultatima za prva 2 kola i generiranim rasporednom preostalih
+- testni korisnički račun s lozinkom s kojima se aplikacija može isprobati ili na Auth0 omogućiti prijavu preko Googlea
+
+**Potrebno je navesti što je od navedenog implementirano:**
+
+- prijava korisnika
+- javno dostupni prikaz stanja natjecanja temeljem poveznice
+- stvaranje novog natjecanja
+- unos i izmjena rezultata, uz izračun novog poretka nakon unosa/izmjene
