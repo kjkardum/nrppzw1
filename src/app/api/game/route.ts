@@ -6,7 +6,7 @@ import {Result, ResultAsync} from "neverthrow";
 
 const createGameSchema = z.object({
     name: z.string().min(3).max(255),
-    description: z.string().min(3).max(255).optional(),
+    description: z.string().optional(),
     competitors: z
         .array(z.string().min(1))
         .min(4).max(8)
@@ -20,12 +20,12 @@ const createGameSchema = z.object({
 export const POST = async (req: Request) => {
     const session = await getSession();
     if (!session || !session.user) {
-        return new Response(JSON.stringify({message: "You must be logged in to view this page"}));
+        return new Response(JSON.stringify({message: "You must be logged in to view this page"}), {status: 401});
     }
     const body = await req.json();
     const validatedBodyResult = Result.fromThrowable(() => createGameSchema.parse(body))();
     if (validatedBodyResult.isErr()) {
-        return new Response(JSON.stringify(validatedBodyResult.error, null, 2))
+        return new Response(JSON.stringify(validatedBodyResult.error, null, 2), {status: 400})
     }
     const validatedBody = validatedBodyResult.value;
     const game = await ResultAsync.fromPromise(prismaClient.competition.create({
@@ -81,4 +81,33 @@ export const POST = async (req: Request) => {
         return Response.json({message: "Game succesfully created, but can't be returned. Try retrieving it again."}, {status: 500});
     }
     return Response.json(gameDeepResult.value);
+}
+
+export const GET = async (req: Request) => {
+    const session = await getSession();
+    if (!session || !session.user) {
+        return new Response(JSON.stringify({message: "You must be logged in to view this page"}));
+    }
+    const games = await prismaClient.competition.findMany({
+        where: {
+            ownerId: session.user.sub
+        },
+        orderBy: {
+            id: 'desc'
+        },
+        include: {
+            players: true,
+            rounds: {
+                include: {
+                    matches: {
+                        include: {
+                            firstPlayer: true,
+                            secondPlayer: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+    return Response.json(games);
 }
