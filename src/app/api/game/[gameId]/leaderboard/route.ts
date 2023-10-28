@@ -1,7 +1,7 @@
 import {prismaClient} from "@/services/prismaClient";
 import {ResultEnum} from "@/types/resultEnum";
 
-export const GET = async (req: Request, {params}: { params: {gameId: string} }) => {
+export const GET = async (req: Request, {params}: { params: { gameId: string } }) => {
     const gameId = Number(params.gameId) || null;
     if (!gameId) {
         return Response.json({message: "Missing game identifier"}, {status: 400});
@@ -58,6 +58,17 @@ export const GET = async (req: Request, {params}: { params: {gameId: string} }) 
         name: game.name,
         description: game.description,
         rounds,
-        leaderboard: players,
-    });
+        unplayedRounds: game.rounds.filter(round => !round.completed)
+            .map(round => ({
+                id: round.id,
+                matches: round.matches.map(match => ({
+                    id: match.id,
+                    firstPlayerName: match.firstPlayer.name,
+                    secondPlayerName: match.secondPlayer.name,
+                }))
+            })),
+        leaderboard:
+        players,
+    })
+        ;
 }

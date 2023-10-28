@@ -76,6 +76,27 @@ export default function LeaderboardPage({params}: { params: { gameId: string } }
                             </table>
                         </div>
                     ))}
+
+                    <h2>Unplayed matches </h2>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">(including played matches for unfinished rounds)</span>
+                    {gameData.unplayedRounds.map((round: any) => (
+                        <div key={round.id}>
+                            <table className={"table-auto"}>
+                                <thead>
+                                <tr>
+                                    <th>Round</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {round.matches.map((match: any) => (
+                                    <tr key={match.id}>
+                                        <td>{match.firstPlayerName} vs {match.secondPlayerName}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ))}
                 </article>
             </main>
         )
