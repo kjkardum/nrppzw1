@@ -139,7 +139,7 @@ export const LoggedInHomepage = () => {
                         <label htmlFor="winPoints"
                                className={'block mb-2 text-sm font-medium text-gray-900 dark:text-white'}>Win
                             points</label>
-                        <input id="winPoints" type="number" {...register("winPoints", {valueAsNumber: true})}
+                        <input id="winPoints" type="number" {...register("winPoints", {valueAsNumber: true})} step="any"
                                className={'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'}/>
                         {errors.winPoints?.message}
                     </div>
@@ -147,7 +147,7 @@ export const LoggedInHomepage = () => {
                         <label htmlFor="drawPoints"
                                className={'block mb-2 text-sm font-medium text-gray-900 dark:text-white'}>Draw
                             points</label>
-                        <input id="drawPoints" type="number" {...register("drawPoints", {valueAsNumber: true})}
+                        <input id="drawPoints" type="number" {...register("drawPoints", {valueAsNumber: true})} step="any"
                                className={'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'}/>
                         {errors.drawPoints?.message}
                     </div>
@@ -155,7 +155,7 @@ export const LoggedInHomepage = () => {
                         <label htmlFor="losePoints"
                                className={'block mb-2 text-sm font-medium text-gray-900 dark:text-white'}>Lose
                             points</label>
-                        <input id="losePoints" type="number" {...register("losePoints", {valueAsNumber: true})}
+                        <input id="losePoints" type="number" {...register("losePoints", {valueAsNumber: true})} step="any"
                                className={'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'}/>
                         {errors.losePoints?.message}
                     </div>
