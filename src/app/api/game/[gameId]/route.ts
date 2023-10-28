@@ -55,17 +55,18 @@ export const PATCH = async (req: NextRequest, {params}: { params: {gameId: strin
     if (game.ownerId !== session.user.sub) {
         return Response.json({message: "You are not the owner of this game"}, {status: 403});
     }
-    const round = game.rounds.toSorted((f,s) => f.order - s.order).find((round) => !round.completed);
+
+    const round = [...game.rounds].sort((f,s) => f.order - s.order).find((round) => !round.completed);
     if (!round) {
         return Response.json({message: "Game is already completed"}, {status: 400});
     }
-    const matches = round.matches.toSorted((f,s) => f.order - s.order);
+    const matches = [...round.matches].sort((f,s) => f.order - s.order);
     if (matches.length !== validatedBody.round.matches.length) {
         return Response.json({message: "Invalid number of matches"}, {status: 400});
     }
 
-    const matchIdsBody = validatedBody.round.matches.map((match) => match.id).toSorted();
-    const matchIdsDb = matches.map((match) => match.id).toSorted();
+    const matchIdsBody = [...validatedBody.round.matches.map((match) => match.id)].sort();
+    const matchIdsDb = [...matches.map((match) => match.id)].sort();
     if (matchIdsBody.join() !== matchIdsDb.join()) {
         return Response.json({message: "Invalid matches identifiers"}, {status: 400});
     }
